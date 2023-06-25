@@ -35,15 +35,15 @@ describe('App e2e', () => {
       lastName: 'lastName',
     };
 
-    // describe('Signup', () => {
-    //   it('it should signup', () => {
-    //     return pactum
-    //       .spec()
-    //       .post('/auth/signup')
-    //       .withBody(dto)
-    //       .expectStatus(201);
-    //   });
-    // });
+    describe('Signup', () => {
+      it('it should signup', () => {
+        return pactum
+          .spec()
+          .post('/auth/signup')
+          .withBody(dto)
+          .expectStatus(201);
+      });
+    });
 
     describe('Signin', () => {
       it('it should return email missing', () => {
@@ -184,8 +184,7 @@ describe('App e2e', () => {
 
     describe('Edit bookmark by id', () => {
       const dto: EditBookmarkDto = {
-        title:
-          'Kubernetes Course - Full Beginners Tutorial (Containerize Your Apps!)',
+        title: 'Kubernetes Course - Full Beginners Tutorial.',
         description:
           'Learn how to use Kubernetes in this complete course. Kubernetes makes it possible to containerize applications and simplifies app deployment to production.',
       };
