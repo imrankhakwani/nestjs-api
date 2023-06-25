@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { CreateBookmarkDto, EditBookmarkDto } from './dto';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateBookmarkDto, EditBookmarkDto } from './dto';
 
 @Injectable()
 export class BookmarkService {
   constructor(private prisma: PrismaService) {}
 
-  async getBookmarks(userId: number) {
+  getBookmarks(userId: number) {
     return this.prisma.bookmarks.findMany({
       where: {
         userId,
@@ -14,11 +14,67 @@ export class BookmarkService {
     });
   }
 
-  getBookmarkById(userId: number, bookmarkId: number) {}
+  getBookmarkById(userId: number, bookmarkId: number) {
+    return this.prisma.bookmarks.findFirst({
+      where: {
+        id: bookmarkId,
+        userId,
+      },
+    });
+  }
 
-  async createBookmark(userId: number, dto: CreateBookmarkDto) {}
+  async createBookmark(userId: number, dto: CreateBookmarkDto) {
+    const bookmark = await this.prisma.bookmarks.create({
+      data: {
+        userId,
+        ...dto,
+      },
+    });
 
-  editBookmarkById(userId: number, bookmarkId: number, dto: EditBookmarkDto) {}
+    return bookmark;
+  }
 
-  deleteBookmarkById(userId: number, bookmarkId: number) {}
+  async editBookmarkById(
+    userId: number,
+    bookmarkId: number,
+    dto: EditBookmarkDto,
+  ) {
+    // get the bookmark by id
+    const bookmark = await this.prisma.bookmarks.findUnique({
+      where: {
+        id: bookmarkId,
+      },
+    });
+
+    // check if user owns the bookmark
+    if (!bookmark || bookmark.userId !== userId)
+      throw new ForbiddenException('Access to resources denied');
+
+    return this.prisma.bookmarks.update({
+      where: {
+        id: bookmarkId,
+      },
+      data: {
+        ...dto,
+      },
+    });
+  }
+
+  async deleteBookmarkById(userId: number, bookmarkId: number) {
+    const bookmark = await this.prisma.bookmarks.findUnique({
+      where: {
+        id: bookmarkId,
+      },
+    });
+
+    // check if user owns the bookmark
+    if (!bookmark || bookmark.userId !== userId)
+      throw new ForbiddenException('Access to resources denied');
+
+    await this.prisma.bookmarks.delete({
+      where: {
+        id: bookmarkId,
+      },
+    });
+  }
 }
