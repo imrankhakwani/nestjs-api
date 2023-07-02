@@ -139,8 +139,8 @@ describe('App e2e', () => {
 
     describe('Create bookmark', () => {
       const dto: CreateBookmarkDto = {
-        title: 'First Bookmark',
-        link: 'https://www.youtube.com/watch?v=d6WC5n9G_sM',
+        title: 'History of Agile',
+        link: 'https://www.youtube.com/watch?v=QcMmok-Ou4c',
       };
       it('should create bookmark', () => {
         return pactum
@@ -184,9 +184,11 @@ describe('App e2e', () => {
 
     describe('Edit bookmark by id', () => {
       const dto: EditBookmarkDto = {
-        title: 'Kubernetes Course - Full Beginners Tutorial.',
+        title:
+          'Advanced Spark Tutorial - Part 1 | Advanced Spark for Developers.',
         description:
-          'Learn how to use Kubernetes in this complete course. Kubernetes makes it possible to containerize applications and simplifies app deployment to production.',
+          'In this era of Artificial Intelligence, Machine Learning, and Data Science, Algorithms that run on Distributed Iterative computation make the task of distributing and computing huge volumes of data easy.',
+        link: 'https://www.youtube.com/watch?v=kHKFItvqU34',
       };
       it('should edit bookmark', () => {
         return pactum
